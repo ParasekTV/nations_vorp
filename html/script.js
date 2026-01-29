@@ -3,14 +3,17 @@ let currentData = null;
 // Event Listener für NUI Nachrichten
 window.addEventListener('message', function(event) {
     const data = event.data;
-    
+
     console.log('[NUI] RAW EVENT DATA:', JSON.stringify(data, null, 2));
-    
+
     if (data.action === 'openMenu') {
         console.log('[NUI] Action is openMenu, data.data:', data.data);
         console.log('[NUI] data.data.isMayor:', data.data.isMayor);
         console.log('[NUI] Type of isMayor:', typeof data.data.isMayor);
         openMenu(data.data);
+    } else if (data.action === 'closeMenu') {
+        console.log('[NUI] Action is closeMenu - hiding container');
+        document.getElementById('container').classList.add('hidden');
     }
 });
 
