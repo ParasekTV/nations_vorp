@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinity Nations</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rye&family=Cinzel:wght@400;700&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="container" class="hidden">
+        <div class="western-frame">
+            <div class="corner-decoration top-left"></div>
+            <div class="corner-decoration top-right"></div>
+            <div class="corner-decoration bottom-left"></div>
+            <div class="corner-decoration bottom-right"></div>
+            
+            <div class="menu-wrapper">
+                <!-- Header mit Western Look -->
+                <div class="menu-header">
+                    <div class="header-ornament left"></div>
+                    <h1 id="townName">Stadt Name</h1>
+                    <div class="header-ornament right"></div>
+                    <div class="close-btn" onclick="closeMenu()">✕</div>
+                </div>
+                
+                <div class="menu-content">
+                    <!-- Status Banner -->
+                    <div class="status-banner">
+                        <div class="banner-item">
+                            <span class="banner-icon">🏛️</span>
+                            <span class="banner-label">NATION</span>
+                            <span class="banner-value" id="nationName">-</span>
+                        </div>
+                        <div class="banner-divider"></div>
+                        <div class="banner-item">
+                            <span class="banner-icon">👤</span>
+                            <span class="banner-label">BÜRGER</span>
+                            <span class="banner-value" id="citizenCount">0</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Leadership Section -->
+                    <div class="leadership-section">
+                        <div class="leader-card mayor-card">
+                            <div class="leader-badge">★</div>
+                            <div class="leader-title">BÜRGERMEISTER</div>
+                            <div class="leader-name" id="mayorName">Keiner</div>
+                        </div>
+                        <div class="leader-card governor-card">
+                            <div class="leader-badge">♔</div>
+                            <div class="leader-title">GOUVERNEUR</div>
+                            <div class="leader-name" id="governorName">Keiner</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Bank Section mit Western Design -->
+                    <div class="bank-section">
+                        <div class="bank-card town-bank">
+                            <div class="bank-icon">💰</div>
+                            <div class="bank-label">STADTBANK</div>
+                            <div class="bank-value" id="townBank">$0</div>
+                        </div>
+                        <div class="bank-card nation-bank">
+                            <div class="bank-icon">👑</div>
+                            <div class="bank-label">NATIONSBANK</div>
+                            <div class="bank-value" id="nationBank">$0</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tax Info mit Wanted Poster Style -->
+                    <div class="tax-poster">
+                        <div class="poster-header">STEUERN & GEBÜHREN</div>
+                        <div class="poster-content">
+                            <div class="poster-item">
+                                <span>Banksteuer:</span>
+                                <span id="bankTax" class="poster-value">0%</span>
+                            </div>
+                            <div class="poster-item">
+                                <span>Stadtsteuer:</span>
+                                <span id="cityTax" class="poster-value">$0</span>
+                            </div>
+                            <div class="poster-item">
+                                <span>Eintrittsgeld:</span>
+                                <span id="entryFee" class="poster-value">$0</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Rewards Section -->
+                    <div class="rewards-section">
+                        <div class="rewards-header">TÄGLICHE BELOHNUNG</div>
+                        <div class="rewards-content">
+                            <span class="reward-item">💵 <span id="rewardMoney">$0</span></span>
+                            <span class="reward-divider">+</span>
+                            <span class="reward-item">⭐ <span id="rewardXP">0 XP</span></span>
+                        </div>
+                    </div>
+                    
+                    <!-- MOTD als Pergament -->
+                    <div id="motdSection" class="motd-section hidden">
+                        <div class="motd-scroll">
+                            <div class="motd-header">NACHRICHT DES TAGES</div>
+                            <div class="motd-text" id="motdText"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Citizen Actions -->
+                    <div id="citizenActions" class="action-section hidden">
+                        <button class="western-btn primary" onclick="claimReward()">
+                            <span class="btn-icon">🎁</span>
+                            <span>BELOHNUNG ABHOLEN</span>
+                        </button>
+                        <button class="western-btn danger" onclick="leaveTown()">
+                            <span class="btn-icon">🚪</span>
+                            <span>STADT VERLASSEN</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Non-Citizen Actions -->
+                    <div id="nonCitizenActions" class="action-section hidden">
+                        <button class="western-btn success" onclick="joinTown()">
+                            <span class="btn-icon">🤝</span>
+                            <span>STADT BEITRETEN</span>
+                        </button>
+                    </div>
+                    
+                    <!-- MAYOR CONTROLS -->
+                    <div id="mayorActions" class="hidden">
+                        <div class="admin-panel mayor-panel">
+                            <div class="panel-header">
+                                <span class="panel-icon">🏛️</span>
+                                <span>BÜRGERMEISTER KONTROLLE</span>
+                            </div>
+                            
+                            <!-- Taxes -->
+                            <div class="control-section">
+                                <h4>💰 Steuerverwaltung</h4>
+                                <div class="control-row">
+                                    <label>Banksteuer (%):</label>
+                                    <input type="number" id="mayorBankTax" min="0" max="100">
+                                    <button class="mini-btn" onclick="updateBankTax()">💾</button>
+                                </div>
+                                <div class="control-row">
+                                    <label>Stadtsteuer ($):</label>
+                                    <input type="number" id="mayorCityTax" min="0">
+                                    <button class="mini-btn" onclick="updateCityTax()">💾</button>
+                                </div>
+                                <div class="control-row">
+                                    <label>Eintrittsgeld ($):</label>
+                                    <input type="number" id="mayorEntryFee" min="0">
+                                    <button class="mini-btn" onclick="updateEntryFee()">💾</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Rewards -->
+                            <div class="control-section">
+                                <h4>🎁 Belohnungen</h4>
+                                <div class="control-row">
+                                    <label>Geld ($):</label>
+                                    <input type="number" id="mayorRewardMoney" min="0">
+                                    <button class="mini-btn" onclick="updateRewardMoney()">💾</button>
+                                </div>
+                                <div class="control-row">
+                                    <label>XP:</label>
+                                    <input type="number" id="mayorRewardXP" min="0">
+                                    <button class="mini-btn" onclick="updateRewardXP()">💾</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Settings -->
+                            <div class="control-section">
+                                <h4>⚙️ Einstellungen</h4>
+                                <div class="control-row">
+                                    <label>Max. Bevölkerung:</label>
+                                    <input type="number" id="mayorMaxPop" min="1">
+                                    <button class="mini-btn" onclick="updateMaxPopulation()">💾</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Bank Management -->
+                            <div class="control-section">
+                                <h4>💵 Stadtbank</h4>
+                                <div class="control-row">
+                                    <input type="number" id="mayorBankAmount" placeholder="Betrag" min="1">
+                                </div>
+                                <div class="control-row buttons">
+                                    <button class="western-btn success small" onclick="depositMoney()">⬇️ Einzahlen</button>
+                                    <button class="western-btn danger small" onclick="withdrawMoney()">⬆️ Abheben</button>
+                                </div>
+                            </div>
+                            
+                            <!-- MOTD -->
+                            <div class="control-section">
+                                <h4>📢 Nachricht</h4>
+                                <textarea id="mayorMOTD" rows="3" placeholder="Nachricht für Bürger..."></textarea>
+                                <button class="western-btn primary small" onclick="updateMOTD()">💾 Speichern</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- GOVERNOR CONTROLS -->
+                    <div id="governorActions" class="hidden">
+                        <div class="admin-panel governor-panel">
+                            <div class="panel-header">
+                                <span class="panel-icon">👑</span>
+                                <span>GOUVERNEUR KONTROLLE</span>
+                            </div>
+                            
+                            <!-- Nation Tax -->
+                            <div class="control-section">
+                                <h4>💰 Nationssteuern</h4>
+                                <div class="control-row">
+                                    <label>Nationssteuer (%):</label>
+                                    <input type="number" id="governorTaxRate" min="0" max="100">
+                                    <button class="mini-btn" onclick="updateNationTax()">💾</button>
+                                </div>
+                                <p class="info-text">Wird von allen Städten eingezogen</p>
+                            </div>
+                            
+                            <!-- Nation Bank -->
+                            <div class="control-section">
+                                <h4>💵 Nationsbank</h4>
+                                <div class="control-row">
+                                    <input type="number" id="governorBankAmount" placeholder="Betrag" min="1">
+                                </div>
+                                <div class="control-row buttons">
+                                    <button class="western-btn success small" onclick="governorDepositMoney()">⬇️ Einzahlen</button>
+                                    <button class="western-btn danger small" onclick="governorWithdrawMoney()">⬆️ Abheben</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
