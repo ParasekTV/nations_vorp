@@ -120,12 +120,16 @@ end)
 
 RegisterNUICallback('joinTown', function(data, cb)
     TriggerServerEvent('infinity_nations:joinTown', currentTown)
+    -- UI schließen und NUI-Focus deaktivieren
+    SendNUIMessage({ action = 'closeMenu' })
     SetNuiFocus(false, false)
     cb('ok')
 end)
 
 RegisterNUICallback('leaveTown', function(data, cb)
     TriggerServerEvent('infinity_nations:leaveTown')
+    -- UI schließen und NUI-Focus deaktivieren
+    SendNUIMessage({ action = 'closeMenu' })
     SetNuiFocus(false, false)
     cb('ok')
 end)
